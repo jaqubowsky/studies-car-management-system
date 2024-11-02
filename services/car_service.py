@@ -8,7 +8,7 @@ class CarService:
 
     def add_car(self, make, model, year, price):
         if not all([make, model, year.isdigit(), price.isdigit()]):
-            print("Invalid data. Make, model, and a numeric year are required.")
+            print("Invalid data. Please make sure all fields are provided and year and price are numeric.")
             return False
 
         id = len(self.cars) + 1
@@ -25,7 +25,7 @@ class CarService:
             return None
 
         if id < 1 or id > len(self.cars):
-            print(f"Invalid index {id}. No car removed.")
+            print(f"Invalid id {id}. No car removed.")
             return None
 
         car = self.cars.pop(id - 1)
