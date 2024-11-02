@@ -1,9 +1,9 @@
 from services.car_service import CarService
-from services.menu_service import Menu
+from services.menu_service import MenuService
 from services.app_service import AppService
 
 car_service = CarService()
-menu_service = Menu()
+menu_service = MenuService()
 app_service = AppService(car_service, menu_service)
 
 if __name__ == "__main__":

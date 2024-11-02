@@ -1,4 +1,4 @@
-class Menu:
+class MenuService:
     def init_main_menu(self):
         print("\nCar Management System")
         print("1. Add a new car")
@@ -33,3 +33,7 @@ class Menu:
 
     def get_user_choice(self):
         return input("Choose an option (1-4): ")
+
+    def interrupt_option(self):
+        print("Operation interrupted. Returning to main menu.")
+
