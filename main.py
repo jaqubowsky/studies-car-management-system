@@ -1,5 +1,5 @@
 from services.car_service import CarService
-import menu
+from services.menu_service import Menu
 
 CHOICES = {
     'NEW_CAR': '1',
@@ -9,22 +9,23 @@ CHOICES = {
 }
 
 car_service = CarService()
+menu_service = Menu()
 
 def run_system():
     while True:
-        menu.init_main_menu()
+        menu_service.init_main_menu()
         choice = input("Choose an option (1-4): ")
 
         if choice == CHOICES['NEW_CAR']:
-            make, model, year, price = menu.get_add_car_inputs()
+            make, model, year, price = menu_service.get_add_car_inputs()
             car_service.add_car(make, model, year, price)
 
         elif choice == CHOICES['REMOVE_CAR']:
             car_service.list_cars()
 
-            index = menu.get_remove_car_inputs()
+            id = menu_service.get_remove_car_inputs()
 
-            car_service.remove_car(index)
+            car_service.remove_car(id)
 
         elif choice == CHOICES['LIST_CARS']:
             car_service.list_cars()
