@@ -6,6 +6,3 @@ class Car:
         self.model = model
         self.year = year
         self._price = _price
-
-    def __str__(self) -> str:
-        return f"{self.year} {self.make} {self.model} - ${self._price:,.2f}"

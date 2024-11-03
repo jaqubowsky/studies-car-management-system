@@ -1,51 +1,32 @@
-CHOICES = {
-    'NEW_CAR': '1',
-    'REMOVE_CAR': '2',
-    'LIST_CARS': '3',
-    'EXIT': '4'
-}
+from exceptions import ExposeException
 
 class AppService:
-    def __init__(self, car_service, menu_service):
+    def __init__(self, car_service):
         self.car_service = car_service
-        self.menu_service = menu_service
 
-    def add_new_car(self):
-        inputs = self.menu_service.get_add_car_inputs()
-        if inputs is None:
-            return
-        make, model, year, price = inputs
+    def add_new_car(self, car_data):
+        if not car_data:
+            raise ExposeException("Car data is missing. Please provide all fields.")
+
+        make = car_data.get('make')
+        model = car_data.get('model')
+        year = car_data.get('year')
+        price = car_data.get('price')
+
+        if not all([make, model, year, price]):
+            raise ExposeException("Incomplete car data. Please provide all fields.")
+
+        if not year.isdigit() or not price.isdigit():
+            raise ExposeException("Invalid year or price. Please provide a valid number.")
+
+
         self.car_service.add_car(make, model, year, price)
 
-    def remove_car(self):
-        self.car_service.list_cars()
-        id = self.menu_service.get_remove_car_inputs()
+    def remove_car(self, id):
         if id is None:
-            return
+            raise ExposeException("Car id is missing. Please provide a valid id.")
+
+        if not str(id).isdigit():
+            raise ExposeException("Invalid car id. Please provide a valid number.")
+
         self.car_service.remove_car(id)
-
-    def run_system(self):
-        while True:
-            self.menu_service.init_main_menu()
-            choice = self.menu_service.get_user_choice()
-
-            try:
-                if choice == CHOICES['NEW_CAR']:
-                    self.add_new_car()
-
-                elif choice == CHOICES['REMOVE_CAR']:
-                    self.remove_car()
-
-                elif choice == CHOICES['LIST_CARS']:
-                    self.car_service.list_cars()
-
-                elif choice == CHOICES['EXIT']:
-                    self.menu_service.exit_system()
-                    break
-
-                else:
-                    self.menu_service.invalid_choice()
-
-            except KeyboardInterrupt:
-                self.menu_service.interrupt_option()
-                continue

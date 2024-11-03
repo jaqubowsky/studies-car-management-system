@@ -1,0 +1,46 @@
+{% with messages = get_flashed_messages(with_categories=true) %} {% if messages
+%}
+<div
+  id="alert-container"
+  class="absolute top-4 right-4 bg-white border border-gray-300 shadow-lg p-4 rounded-lg animate-fade-out"
+>
+  {% for category, message in messages %}
+  <div class="flex items-center justify-center">
+    <span class="mr-2">
+      {% if category == 'success' %}
+      <svg
+        class="w-5 h-5 text-green-500"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      {% elif category == 'error' %}
+      <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-11a1 1 0 112 0v4a1 1 0 11-2 0V7zm1 8a1 1 0 100-2 1 1 0 000 2z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      {% else %}
+      <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 102 0V7zm-1 8a1 1 0 100-2 1 1 0 000 2z"
+        />
+      </svg>
+      {% endif %}
+    </span>
+    <p
+      class="text-sm {% if category == 'success' %}text-green-500{% elif category == 'error' %}text-red-500{% else %}text-black{% endif %}"
+    >
+      {{ message }}
+    </p>
+  </div>
+  {% endfor %}
+</div>
+{% endif %} {% endwith %}

@@ -1,3 +1,4 @@
+from exceptions import ExposeException
 import json
 from models.car import Car
 
@@ -7,53 +8,43 @@ class CarService:
         self.load_cars()
 
     def add_car(self, make, model, year, price):
-        if not all([make, model, year.isdigit(), price.isdigit()]):
-            print("Invalid data. Please make sure all fields are provided and year and price are numeric.")
-            return False
-
         id = len(self.cars) + 1
         car = Car(make, model, int(year), int(price), id)
+
         self.cars.append(car)
         self.save_cars()
-        print(f"{car} added successfully.")
 
     def remove_car(self, id):
         try:
-            id = int(id)
+            car_to_remove = next((car for car in self.cars if car._id == id), None)
+            if not car_to_remove:
+                raise ExposeException("Car not found. Please provide a valid id.")
+
+            self.cars.remove(car_to_remove)
+
+            self.save_cars()
         except ValueError:
-            print(f"Invalid id '{id}'. Please provide a numeric value.")
-            return None
+            raise ExposeException("Car not found. Please provide a valid id.")
 
-        if id < 1 or id > len(self.cars):
-            print(f"Invalid id {id}. No car removed.")
-            return None
-
-        car = self.cars.pop(id - 1)
-        self.save_cars()
-        print(f"{car} removed successfully.")
-
-    def list_cars(self):
+    def get_cars(self):
         if self.cars:
-            print("Current cars in the system:")
-            for _, car in enumerate(self.cars):
-                print(f"{car._id}: {car}")
+            return self.cars
         else:
-            print("No cars in the system.")
+            return []
 
     def save_cars(self):
         cars_data = [car.__dict__ for car in self.cars]
-        with open('cars.json', 'w') as f:
+        with open('data/cars.json', 'w') as f:
             json.dump(cars_data, f)
 
     def load_cars(self):
         try:
-            with open('cars.json', 'r') as f:
+            with open('data/cars.json', 'r') as f:
                 cars_data = json.load(f)
             for car in cars_data:
                 self.cars.append(Car(**car))
         except FileNotFoundError:
-            self.cars = []
+            raise FileNotFoundError("The cars.json file was not found.")
         except json.JSONDecodeError:
-            print("Error decoding JSON. Starting with an empty list.")
-            self.cars = []
+            raise json.JSONDecodeError("The cars.json file contains invalid JSON.")
 
