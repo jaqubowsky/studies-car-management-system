@@ -43,7 +43,7 @@ This is a web-based application for managing a collection of cars. It allows use
    npm install
    ```
 
-5. **Run the application:**
+5. **Run the application:**         
 
    ```bash
    npm start
