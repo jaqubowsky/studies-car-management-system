@@ -30,6 +30,12 @@
             Price: ${{ '{:,.2f}'.format(car._price) }}
           </p>
           <input type="hidden" name="car_id" value="{{ car._id }}" />
+          <a
+            href="{{ url_for('edit_car', car_id=car._id) }}"
+            class="text-blue-600 underline font-medium mt-2 inline-block"
+          >
+            Edit
+          </a>
           <button
             type="submit"
             class="text-red-600 underline font-medium mt-2 inline-block"

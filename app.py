@@ -35,6 +35,23 @@ def add_car():
         return redirect(url_for('add_car'))
     return render_template('add_car.html')
 
+@app.route('/edit-car/<int:car_id>', methods=['GET', 'POST'])
+def edit_car(car_id):
+    if request.method == 'POST':
+        car_data = request.form
+        try:
+            app_service.update_car(car_id, car_data)
+            flash('Car updated successfully!', 'success')
+            return redirect(url_for('index'))
+        except ExposeException as e:
+            flash(str(e), 'error')
+    car = next((car for car in car_service.get_cars() if car._id == car_id), None)
+    if not car:
+        flash('Car not found.', 'error')
+        return redirect(url_for('index'))
+    return render_template('edit_car.html', car=car)
+
+
 @app.errorhandler(Exception)
 def handle_exception(e):
     if isinstance(e, ExposeException):
